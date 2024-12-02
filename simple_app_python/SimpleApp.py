@@ -25,8 +25,7 @@ def update_function(new_values, running_count):
 
 # 每批次统计当前批次词频
 word_counts = lines.flatMap(lambda line: line.split(" ")) \
-                   .map(lambda word: (word, 1)) \
-                   .reduceByKey(lambda a, b: a + b)
+                   .map(lambda word: (word, 1))
 
 # 使用updateStateByKey实现累积
 cumulative_word_counts = word_counts.updateStateByKey(update_function)
@@ -40,14 +39,14 @@ def get_top_words(rdd):
     top_100 = sorted_words.take(100)  # 获取前100个
     print("\nTop 100 Words:")
     for word, count in top_100:
-        print(f"{word}: {count}")
+        print(f"{word} {count}")
     output_dir = "./output_files"  # 设置本地存储目录
     os.makedirs(output_dir, exist_ok=True)  # 如果目录不存在则创建
     global cnt
     output_path = os.path.join(output_dir, f"top_100_words_batch_{cnt}.txt")
     with open(output_path, "w") as f:
         for word, count in top_100:
-            f.write(f"{word}: {count}\n")
+            f.write(f"{word} {count}\n")
     print(f"Top 100 words for batch {cnt} saved to {output_path}")
     cnt += 1
 
